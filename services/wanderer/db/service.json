@@ -1,0 +1,50 @@
+{
+  "$schema": "https://flisk.sh/schema.service.json",
+  "schemaVersion": 1,
+  "appName": "db",
+  "appType": "bring-your-own",
+  "stack": "wanderer",
+  "port": 8090,
+  "healthCheckPath": "/health",
+  "healthCheck": {
+    "command": [
+      "/curl",
+      "--fail",
+      "http://localhost:8090/health"
+    ],
+    "interval": 15,
+    "timeout": 10,
+    "retries": 10,
+    "startPeriod": 20
+  },
+  "image": "flomp/wanderer-db",
+  "dependsOn": [
+    "search"
+  ],
+  "env": {
+    "MEILI_MASTER_KEY": "${MEILI_MASTER_KEY:?set MEILI_MASTER_KEY in .env}",
+    "MEILI_URL": "http://search:7700",
+    "ORIGIN": "${ORIGIN:?set ORIGIN in .env}",
+    "POCKETBASE_ENCRYPTION_KEY": "${POCKETBASE_ENCRYPTION_KEY:?set POCKETBASE_ENCRYPTION_KEY in .env}",
+    "POCKETBASE_PROXY_SECRET": "${POCKETBASE_PROXY_SECRET:?set POCKETBASE_PROXY_SECRET in .env}"
+  },
+  "restart": "unless-stopped",
+  "envFile": [
+    "../../../.env"
+  ],
+  "extraPorts": [
+    {
+      "port": 8090
+    }
+  ],
+  "volumes": [
+    {
+      "source": "../../../data/pb_data",
+      "target": "/pb_data"
+    },
+    {
+      "source": "../../../data/plugins",
+      "target": "/data/plugins"
+    }
+  ]
+}

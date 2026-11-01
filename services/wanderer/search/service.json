@@ -1,0 +1,38 @@
+{
+  "$schema": "https://flisk.sh/schema.service.json",
+  "schemaVersion": 1,
+  "appName": "search",
+  "appType": "bring-your-own",
+  "stack": "wanderer",
+  "port": 7700,
+  "healthCheckPath": "/",
+  "healthCheck": {
+    "command": [
+      "sh",
+      "-c",
+      "curl --fail http://localhost:7700/health || exit 1"
+    ],
+    "interval": 15,
+    "timeout": 10,
+    "retries": 10,
+    "startPeriod": 20
+  },
+  "image": "getmeili/meilisearch:v1.36.0",
+  "env": {
+    "MEILI_MASTER_KEY": "${MEILI_MASTER_KEY:?set MEILI_MASTER_KEY in .env}",
+    "MEILI_NO_ANALYTICS": "true"
+  },
+  "restart": "unless-stopped",
+  "extraPorts": [
+    {
+      "port": 7700,
+      "bind": "0.0.0.0"
+    }
+  ],
+  "volumes": [
+    {
+      "source": "../../../data/data.ms",
+      "target": "/meili_data/data.ms"
+    }
+  ]
+}

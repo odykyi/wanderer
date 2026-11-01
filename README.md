@@ -46,6 +46,8 @@ The first startup can take up to 90 seconds after which you can access the front
 
 You can also run wanderer on bare-metal. Check out the [documentation](https://wanderer.to/run/installation/from-source) for a detailed how-to guide.
 
+Optional: the same stack is also described per service for [Flisk](https://flisk.sh), see [docs/FLISK.md](docs/FLISK.md). `docker-compose.yml` stays the main way.
+
 ## Support wanderer
 
 If you like wanderer and would like to give something back you can donate over [here](https://www.buymeacoffee.com/wanderertrails). If you prefer to support the development with a regular contribution you can donate via [Liberapay](https://liberapay.com/wanderer/).

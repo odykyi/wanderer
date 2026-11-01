@@ -1,0 +1,51 @@
+{
+  "$schema": "https://flisk.sh/schema.service.json",
+  "schemaVersion": 1,
+  "appName": "web",
+  "appType": "bring-your-own",
+  "stack": "wanderer",
+  "port": 3000,
+  "healthCheckPath": "/",
+  "healthCheck": {
+    "command": [
+      "curl",
+      "--fail",
+      "http://localhost:3000/"
+    ],
+    "interval": 15,
+    "timeout": 10,
+    "retries": 10,
+    "startPeriod": 20
+  },
+  "image": "flomp/wanderer-web",
+  "dependsOn": [
+    "db",
+    "search"
+  ],
+  "env": {
+    "BODY_SIZE_LIMIT": "${BODY_SIZE_LIMIT:-2G}",
+    "MEILI_MASTER_KEY": "${MEILI_MASTER_KEY:?set MEILI_MASTER_KEY in .env}",
+    "MEILI_URL": "http://search:7700",
+    "ORIGIN": "${ORIGIN:?set ORIGIN in .env}",
+    "POCKETBASE_ENCRYPTION_KEY": "${POCKETBASE_ENCRYPTION_KEY:?set POCKETBASE_ENCRYPTION_KEY in .env}",
+    "POCKETBASE_PROXY_SECRET": "${POCKETBASE_PROXY_SECRET:?set POCKETBASE_PROXY_SECRET in .env}",
+    "PUBLIC_POCKETBASE_URL": "http://db:8090",
+    "UPLOAD_FOLDER": "/app/uploads"
+  },
+  "restart": "unless-stopped",
+  "envFile": [
+    "../../../.env"
+  ],
+  "extraPorts": [
+    {
+      "port": 3000,
+      "bind": "0.0.0.0"
+    }
+  ],
+  "volumes": [
+    {
+      "source": "../../../data/uploads",
+      "target": "/app/uploads"
+    }
+  ]
+}
